@@ -19,6 +19,9 @@ class _MachMainScreenState extends State<MachMainScreen> {
 
   double x = 0.0;
   double y = 0.0;
+  Offset lineStartOffset = const Offset(0, 0);
+  Offset lineEndOffset = const Offset(0, 0);
+  double circleRadius = 0.0;
 
   @override
   void initState() {
@@ -72,9 +75,13 @@ class _MachMainScreenState extends State<MachMainScreen> {
           //   startOffset: lineStartOffset,
           //   endOffset: lineEndOffset,
           // ),
-          painter: RectanglePainter(
-            startOffset: lineStartOffset,
-            endOffset: lineEndOffset,
+          // painter: RectanglePainter(
+          //   startOffset: lineStartOffset,
+          //   endOffset: lineEndOffset,
+          // ),
+          painter: CirclePainter(
+            center: lineStartOffset,
+            radius: circleRadius,
           ),
         ),
       ),
@@ -155,6 +162,7 @@ class _MachMainScreenState extends State<MachMainScreen> {
                               details.localPosition.dx,
                               details.localPosition.dy - 15,
                             );
+                            circleRadius = 0.0;
                           });
                         },
                         onPanEnd: (details) {
@@ -176,6 +184,8 @@ class _MachMainScreenState extends State<MachMainScreen> {
                             _globalPosition = details.globalPosition;
 
                             // lineEndOffset = details.localPosition;
+                            // print();
+                            circleRadius =_localPosition.distance - lineStartOffset.distance;
                             lineEndOffset = Offset(
                               details.localPosition.dx,
                               details.localPosition.dy - 15,
@@ -221,10 +231,14 @@ class _MachMainScreenState extends State<MachMainScreen> {
                                 bottom: 0,
                                 top: 0,
                                 child: CustomPaint(
-                                  painter: RectanglePainter(
-                                      startOffset: lineStartOffset,
-                                      endOffset: lineEndOffset,
+                                  painter: CirclePainter(
+                                    center: lineStartOffset,
+                                    radius: circleRadius,
                                   ),
+                                  // painter: RectanglePainter(
+                                  //   startOffset: lineStartOffset,
+                                  //   endOffset: lineEndOffset,
+                                  // ),
                                   // painter: LinePainter(
                                   //   startOffset: lineStartOffset,
                                   //   endOffset: lineEndOffset,
@@ -276,8 +290,7 @@ class _MachMainScreenState extends State<MachMainScreen> {
     );
   }
 
-  Offset lineStartOffset = const Offset(0, 0);
-  Offset lineEndOffset = const Offset(0, 0);
+
 }
 
 class LinePainter extends CustomPainter {
@@ -333,3 +346,25 @@ class RectanglePainter extends CustomPainter {
   }
 }
 
+class CirclePainter extends CustomPainter {
+  Offset? center;
+  double? radius;
+
+  CirclePainter({this.center, this.radius});
+
+  @override
+  void paint(fui.Canvas canvas, fui.Size size) {
+    final paint = Paint()
+      ..strokeWidth = 4
+      ..color = Colors.red
+      ..style = PaintingStyle.stroke;
+
+    canvas.drawCircle(center ?? Offset(0, 0), radius ?? 0.0, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant fui.CustomPainter oldDelegate) {
+    // TODO: implement shouldRepaint
+    return true;
+  }
+}
