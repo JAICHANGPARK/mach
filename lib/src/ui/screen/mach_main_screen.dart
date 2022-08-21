@@ -22,6 +22,8 @@ class _MachMainScreenState extends State<MachMainScreen> {
   Offset lineStartOffset = const Offset(0, 0);
   Offset lineEndOffset = const Offset(0, 0);
   double circleRadius = 0.0;
+  Offset _localPosition = Offset(0.0, 0.0);
+  Offset _globalPosition = Offset(0.0, 0.0);
 
   @override
   void initState() {
@@ -87,9 +89,6 @@ class _MachMainScreenState extends State<MachMainScreen> {
       ),
     );
   }
-
-  Offset _localPosition = Offset(0.0, 0.0);
-  Offset _globalPosition = Offset(0.0, 0.0);
 
   @override
   Widget build(BuildContext context) {
@@ -185,7 +184,11 @@ class _MachMainScreenState extends State<MachMainScreen> {
 
                             // lineEndOffset = details.localPosition;
                             // print();
-                            circleRadius =_localPosition.distance - lineStartOffset.distance;
+                            double rad = _localPosition.distance - lineStartOffset.distance;
+                            if(rad <= 0) {
+                              rad = 0;
+                            }
+                            circleRadius = rad;
                             lineEndOffset = Offset(
                               details.localPosition.dx,
                               details.localPosition.dy - 15,
@@ -289,8 +292,6 @@ class _MachMainScreenState extends State<MachMainScreen> {
       ),
     );
   }
-
-
 }
 
 class LinePainter extends CustomPainter {
