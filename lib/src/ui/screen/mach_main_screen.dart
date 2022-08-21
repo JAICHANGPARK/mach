@@ -68,7 +68,11 @@ class _MachMainScreenState extends State<MachMainScreen> {
         bottom: 0,
         top: 0,
         child: CustomPaint(
-          painter: LinePainter(
+          // painter: LinePainter(
+          //   startOffset: lineStartOffset,
+          //   endOffset: lineEndOffset,
+          // ),
+          painter: RectanglePainter(
             startOffset: lineStartOffset,
             endOffset: lineEndOffset,
           ),
@@ -217,10 +221,14 @@ class _MachMainScreenState extends State<MachMainScreen> {
                                 bottom: 0,
                                 top: 0,
                                 child: CustomPaint(
-                                  painter: LinePainter(
-                                    startOffset: lineStartOffset,
-                                    endOffset: lineEndOffset,
+                                  painter: RectanglePainter(
+                                      startOffset: lineStartOffset,
+                                      endOffset: lineEndOffset,
                                   ),
+                                  // painter: LinePainter(
+                                  //   startOffset: lineStartOffset,
+                                  //   endOffset: lineEndOffset,
+                                  // ),
                                 ),
                               ),
                               Positioned(
@@ -298,3 +306,30 @@ class LinePainter extends CustomPainter {
     return true;
   }
 }
+
+class RectanglePainter extends CustomPainter {
+  Offset? startOffset;
+  Offset? endOffset;
+
+  RectanglePainter({this.startOffset, this.endOffset});
+
+  @override
+  void paint(fui.Canvas canvas, fui.Size size) {
+    final paint = Paint()
+      ..strokeWidth = 4
+      ..color = Colors.red
+      ..style = PaintingStyle.stroke;
+    final rect = Rect.fromPoints(
+      startOffset ?? Offset(0, 0),
+      endOffset ?? Offset(0, 0),
+    );
+    canvas.drawRect(rect, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant fui.CustomPainter oldDelegate) {
+    // TODO: implement shouldRepaint
+    return true;
+  }
+}
+
